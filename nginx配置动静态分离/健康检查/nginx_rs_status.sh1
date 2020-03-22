@@ -1,0 +1,18 @@
+#!/bin/bash
+#name chenhj
+#filename check nginx running status
+#2020-1-23
+
+rsstatus=($(grep 192.168.36 /usr/local/nginx/conf/nginx.conf|awk -F "[ :]+" '{print $3}'))
+
+for  (( ip=0; ip<${#rsstatus[*]}; ip++ ))
+do
+	routeport=`nmap ${rsstatus[$ip]} -p 80|grep open|wc -l`
+	if [ $routeport -eq 1 ]
+	  then
+		echo "${rsstatus[$ip]} nginx web server runing ok"
+	else
+		echo "${rsstatus[$ip]} nginx web server not ok"
+	fi
+done
+
